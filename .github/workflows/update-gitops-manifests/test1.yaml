@@ -1,0 +1,26 @@
+name: Run Tests
+
+on:
+    workflow_dispatch:
+
+jobs:
+    test:
+        runs-on: ubuntu-24.04
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+            - name: Setup Node.js environment
+              uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+            - name: Install Task
+              uses: supplypike/setup-bin@1fafb085795af4a3f183502f3a9dffa8f7b83217 # v5.0.0
+              with: 
+                uri: "https://github.com/go-task/task/releases/download/v3.44.1/task_linux_amd64.tar.gz"
+                name: task
+                version: v3.44.1
+            - name: Install node dependencies
+              working-directory: services/node/api-node
+              run: |
+               task install-ci
+            - name: Run tests
+              run: |
+               task test
