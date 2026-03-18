@@ -72,12 +72,15 @@ jobs:
 
   filter:
     runs-on: ubuntu:24.04
+    outputs:
+      services: ${{ steps.filter.outputs.changes }} # This jobs output will be named as (changes)
     steps:
       - name: filter
         id: filter
         uses: dorny/paths-filter@v3 # It checks which files/folders changed in a commit or PR.
         with:
-          token: ${{ secrets.token }} # for dorny to access gihtub api
+          token: ${{ secrets.GITHUB_TOKEN }} # for dorny to access gihtub api
+          filters: .github/utils/file-filters.yaml
 
   test:
     runs-on: ubuntu-24.04
