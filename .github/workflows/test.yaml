@@ -66,20 +66,33 @@
 name: Run Tests
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - services/**
+      - .github/workflows/test.yaml
+  pull_request:
   workflow_dispatch:
 
 jobs:
 
   filter:
-    runs-on: ubuntu:24.04
+    runs-on: ubuntu-24.04
     outputs:
       services: ${{ steps.filter.outputs.changes }} # This jobs output will be named as (changes)
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+        
       - name: filter
         id: filter
         uses: dorny/paths-filter@v3 # It checks which files/folders changed in a commit or PR.
         with:
           token: ${{ secrets.GITHUB_TOKEN }} # for dorny to access gihtub api
+          base: main
           filters: .github/utils/file-filters.yaml
 
   test:
@@ -88,13 +101,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service:
-          [
-            "services/node/api-node",
-            "services/go/api-golang",
-            "services/react/client-react",
-            "services/python/load-generator-python"
-          ]
+        service: ${{ fromJson(needs.filter.outputs.services) }} # needs -> output of previous job, filter -> name of job, outputs.services -> output variable of that job
 
     steps:
       - name: Checkout code
