@@ -82,7 +82,7 @@ jobs:
     outputs:
       services: ${{ steps.filter.outputs.changes }} # This jobs output will be named as (changes)
     steps:
-      - name: Checkout code
+      - name: Checkout code # placed before filter, coz filter runs git commands, so without checkout there might not be proper repo metadata
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -98,13 +98,14 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     needs: filter
+    if: ${{ needs.filter.outputs.services != '[]' && needs.filter.outputs.services != '' }}
     strategy:
       fail-fast: false
       matrix:
         service: ${{ fromJson(needs.filter.outputs.services) }} # needs -> output of previous job, filter -> name of job, outputs.services -> output variable of that job
 
     steps:
-      - name: Checkout code
+      - name: Checkout code # ran twice since both jobs not necessarily run on same runner
         uses: actions/checkout@v3
 
       - name: Setup Node.js
