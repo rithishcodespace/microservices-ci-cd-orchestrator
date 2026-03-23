@@ -8,7 +8,7 @@ env:
 # --no-skip-checkout used for push trigger to get git tags
 #  - Uses catthehacker/ubuntu:act-22.04 because node:16-buster-slim doesnt contain git, and 24.04 image is still beta (and failed)
 tasks:
-  trigger-workflow-workflow-dispatch:
+  trigger-workflow:
     desc: Trigger GitHub Actions workflow_dispatch event using act
     cmds:
       - |
@@ -20,15 +20,15 @@ tasks:
           --directory ../../.. \
           -W .github/workflows/build-push.yaml
 
-  trigger-workflow-tag:
-    desc: Trigger GitHub Actions push event using act with git tags
-    cmds:
-      - |
-        act push \
-          --container-architecture linux/amd64 \
-          -s GITHUB_TOKEN="{{.GITHUB_TOKEN}}" \
-          -e {{.PWD}}/push-tag-event.json \
-          -P ubuntu-24.04=catthehacker/ubuntu:act-22.04 \
-          --directory ../../.. \
-          --no-skip-checkout \
-          -W .github/workflows/build-push.yaml
+  # trigger-workflow-tag:
+  #   desc: Trigger GitHub Actions push event using act with git tags
+  #   cmds:
+  #     - |
+  #       act push \
+  #         --container-architecture linux/amd64 \
+  #         -s GITHUB_TOKEN="{{.GITHUB_TOKEN}}" \
+  #         -e {{.PWD}}/push-tag-event.json \
+  #         -P ubuntu-24.04=catthehacker/ubuntu:act-22.04 \
+  #         --directory ../../.. \
+  #         --no-skip-checkout \
+  #         -W .github/workflows/build-push.yaml
