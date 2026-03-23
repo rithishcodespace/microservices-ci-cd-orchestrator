@@ -9,19 +9,19 @@ inputs:
     description: "version of task to install"
     default: "v3.44.0"
 
-  # Language runtimes / toolchains
-  install_go:
-    description: "install go if true"
-    default: "false"
-  install_node:
-    description: "install node if true"
-    default: "false"
-  install_python:
-    description: "install python if true"
-    default: "false"
-  service_path:
-    description: "path to service within repo (used to find version file)"
-    default: ""
+#   # Language runtimes / toolchains
+#   install_go:
+#     description: "install go if true"
+#     default: "false"
+#   install_node:
+#     description: "install node if true"
+#     default: "false"
+#   install_python:
+#     description: "install python if true"
+#     default: "false"
+#   service_path:
+#     description: "path to service within repo (used to find version file)"
+#     default: ""
 
 runs:
   using: "composite"
@@ -30,9 +30,9 @@ runs:
       if: ${{ inputs.install_task == 'true' }}
       uses: supplypike/setup-bin@1fafb085795af4a3f183502f3a9dffa8f7b83217 # v5.0.0
       with:
-        uri: "https://github.com/go-task/task/releases/download/${{ inputs.task_version }}/task_linux_amd64.tar.gz"
+        uri: "https://github.com/go-task/task/releases/download/${{inputs.task_version}}/task_linux_amd64.tar.gz"
         name: task
-        version: ${{ inputs.task_version }}
+        version: ${{inputs.task_version}}
 
     - name: Set up Go
       if: ${{ inputs.install_go == 'true' }}

@@ -38,9 +38,9 @@ jobs:
           fetch-depth: 0 # complete repo will be checkouted
           
       - name: Install Task CLI
-        uses: go-task/setup-task@v1
+        uses: ./.github/actions/setup-dependencies
         with:
-          version: 3.44.1
+          task_version: 3.44.1
 
       - name: Auth to dockerhub
         if: ${{!env.ACT}} # if not running on act, authenticate
